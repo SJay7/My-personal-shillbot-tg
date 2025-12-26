@@ -29,8 +29,11 @@ async def load_lounges_from_folder():
         # Get all dialog filters (folders)
         result = await client(GetDialogFiltersRequest())
         
+        # Handle both old and new API response formats
+        folders = result.filters if hasattr(result, 'filters') else result
+        
         target_folder = None
-        for folder in result.filters:
+        for folder in folders:
             if hasattr(folder, 'title'):
                 title = folder.title
                 if hasattr(title, 'text'):
